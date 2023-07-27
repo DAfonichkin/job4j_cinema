@@ -1,28 +1,37 @@
 package ru.job4j.cinema.model;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class Ticket {
 
     private int id;
 
-    private FilmSession filmSession;
+    private int sessionId;
 
     private int rowNumber;
 
     private int placeNumber;
 
-    private User user;
+    private int userId;
+
+    public static final Map<String, String> COLUMN_MAPPING = Map.of(
+            "id", "id",
+            "session_id", "sessionId",
+            "user_id", "userId",
+            "row_number", "rowNumber",
+            "place_number", "placeNumber"
+    );
 
     public Ticket() {
     }
 
-    public Ticket(int id, FilmSession filmSession, int rowNumber, int placeNumber, User user) {
+    public Ticket(int id, int sessionId, int rowNumber, int placeNumber, int user) {
         this.id = id;
-        this.filmSession = filmSession;
+        this.sessionId = sessionId;
         this.rowNumber = rowNumber;
         this.placeNumber = placeNumber;
-        this.user = user;
+        this.userId = user;
     }
 
     public int getId() {
@@ -33,12 +42,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public FilmSession getFilmSession() {
-        return filmSession;
+    public int getFilmSession() {
+        return sessionId;
     }
 
-    public void setFilmSession(FilmSession filmSession) {
-        this.filmSession = filmSession;
+    public void setFilmSession(int sessionId) {
+        this.sessionId = sessionId;
     }
 
     public int getRowNumber() {
@@ -57,12 +66,12 @@ public class Ticket {
         this.placeNumber = placeNumber;
     }
 
-    public User getUser() {
-        return user;
+    public int getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(int user) {
+        this.userId = user;
     }
 
     @Override

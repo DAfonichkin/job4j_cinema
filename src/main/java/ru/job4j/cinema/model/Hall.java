@@ -1,5 +1,6 @@
 package ru.job4j.cinema.model;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class Hall {
@@ -13,6 +14,14 @@ public class Hall {
     private int placeCount;
 
     private String description;
+
+    public static final Map<String, String> COLUMN_MAPPING = Map.of(
+            "id", "id",
+            "name", "name",
+            "description", "description",
+            "place_count", "placeCount",
+            "row_count", "rowCount"
+    );
 
     public Hall() {
     }

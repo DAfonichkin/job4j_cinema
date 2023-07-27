@@ -1,5 +1,6 @@
 package ru.job4j.cinema.model;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class Film {
@@ -12,27 +13,38 @@ public class Film {
 
     private int year;
 
-    private Genre genre;
+    private int genreId;
 
     private int minimalAge;
 
     private int durationInMinutes;
 
-    private File file;
+    private int fileId;
+
+    public static final Map<String, String> COLUMN_MAPPING = Map.of(
+            "id", "id",
+            "name", "name",
+            "description", "description",
+            "year", "year",
+            "genre_id", "genreId",
+            "minimal_age", "minimalAge",
+            "duration_in_minutes", "durationInMinutes",
+            "file_id", "fileId"
+    );
 
 
     public Film() {
     }
 
-    public Film(int id, String name, String description, int year, Genre genre, int minimalAge, int durationInMinutes, File file) {
+    public Film(int id, String name, String description, int year, int genre, int minimalAge, int durationInMinutes, int fileId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.year = year;
-        this.genre = genre;
+        this.genreId = genre;
         this.minimalAge = minimalAge;
         this.durationInMinutes = durationInMinutes;
-        this.file = file;
+        this.fileId = fileId;
     }
 
     public int getId() {
@@ -67,12 +79,12 @@ public class Film {
         this.year = year;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public int getGenreId() {
+        return genreId;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenre(int genre) {
+        this.genreId = genre;
     }
 
     public int getMinimalAge() {
@@ -91,12 +103,12 @@ public class Film {
         this.durationInMinutes = durationInMinutes;
     }
 
-    public File getFile() {
-        return file;
+    public int getFileId() {
+        return fileId;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
 

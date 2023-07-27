@@ -1,15 +1,16 @@
 package ru.job4j.cinema.model;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 
 public class FilmSession {
 
     private int id;
 
-    private Film film;
+    private int filmId;
 
-    private Hall hall;
+    private int hallId;
 
     private LocalDateTime startTime;
 
@@ -17,14 +18,24 @@ public class FilmSession {
 
     private int price;
 
+    public static final Map<String, String> COLUMN_MAPPING = Map.of(
+            "id", "id",
+            "film_id", "filmId",
+            "halls_id", "hallId",
+            "start_time", "startTime",
+            "end_time", "endTime",
+            "price", "price"
+    );
+
+
 
     public FilmSession() {
     }
 
-    public FilmSession(int id, Film film, Hall hall, LocalDateTime startTime, LocalDateTime endTime, int price) {
+    public FilmSession(int id, int filmId, int hallId, LocalDateTime startTime, LocalDateTime endTime, int price) {
         this.id = id;
-        this.film = film;
-        this.hall = hall;
+        this.filmId = filmId;
+        this.hallId = hallId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
@@ -38,20 +49,20 @@ public class FilmSession {
         this.id = id;
     }
 
-    public Film getFilm() {
-        return film;
+    public int getFilmId() {
+        return filmId;
     }
 
-    public void setFilm(Film film) {
-        this.film = film;
+    public void setFilmId(int filmId) {
+        this.filmId = filmId;
     }
 
-    public Hall getHall() {
-        return hall;
+    public int getHall() {
+        return hallId;
     }
 
-    public void setHall(Hall hall) {
-        this.hall = hall;
+    public void setHall(int hallId) {
+        this.hallId = hallId;
     }
 
     public LocalDateTime getStartTime() {
