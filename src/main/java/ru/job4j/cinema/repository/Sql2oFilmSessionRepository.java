@@ -20,7 +20,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
     public FilmSession save(FilmSession filmSession) {
         try (var connection = sql2o.open()) {
             var sql = """
-                      INSERT INTO filmSessions(film_id, halls_id, start_time, end_time, price)
+                      INSERT INTO film_sessions(film_id, halls_id, start_time, end_time, price)
                       VALUES (:film_id, :halls_id, :start_time, :end_time, :price)
                       """;
             var query = connection.createQuery(sql, true)
@@ -38,7 +38,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
     @Override
     public boolean deleteById(int id) {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("DELETE FROM filmSessions WHERE id = :id");
+            var query = connection.createQuery("DELETE FROM film_sessions WHERE id = :id");
             query.addParameter("id", id);
             var affectedRows = query.executeUpdate().getResult();
             return affectedRows > 0;
@@ -49,7 +49,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
     public boolean update(FilmSession filmSession) {
         try (var connection = sql2o.open()) {
             var sql = """
-                    UPDATE filmSessions
+                    UPDATE film_sessions
                     SET film_id = :film_id, halls_id = :halls_id, start_time = :start_time,
                         end_time = :end_time, price = :price
                     WHERE id = :id
@@ -68,7 +68,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
     @Override
     public Optional<FilmSession> findById(int id) {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("SELECT * FROM filmSessions WHERE id = :id");
+            var query = connection.createQuery("SELECT * FROM film_sessions WHERE id = :id");
             query.addParameter("id", id);
             var filmSession = query.setColumnMappings(FilmSession.COLUMN_MAPPING).executeAndFetchFirst(FilmSession.class);
             return Optional.ofNullable(filmSession);
@@ -78,7 +78,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
     @Override
     public Collection<FilmSession> findAll() {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("SELECT * FROM filmSessions");
+            var query = connection.createQuery("SELECT * FROM film_sessions");
             return query.setColumnMappings(FilmSession.COLUMN_MAPPING).executeAndFetch(FilmSession.class);
         }
     }

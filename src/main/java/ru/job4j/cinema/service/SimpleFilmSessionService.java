@@ -28,8 +28,22 @@ public class SimpleFilmSessionService implements FilmSessionService {
     }
 
     @Override
-    public Optional<FilmSession> findById(int id) {
-        return filmSessionRepository.findById(id);
+    public Optional<FilmSessionDto> findById(int id) {
+        var filmSessionOptional = filmSessionRepository.findById(id);
+        if (filmSessionOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        FilmSession filmSession = filmSessionOptional.get();
+        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession);
+        Optional<Film> film = filmRepository.findById(filmSession.getFilmId());
+        film.ifPresent(value -> filmSessionDto.setFilm(value.getName()));
+        Optional<Hall> hall = hallRepository.findById(filmSession.getHall());
+        hall.ifPresent(value -> {
+            filmSessionDto.setHall(value.getName());
+            filmSessionDto.setRowCount(value.getRowCount());
+            filmSessionDto.setPlaceCount(value.getPlaceCount());
+        });
+        return Optional.of(filmSessionDto);
     }
 
     @Override
@@ -45,7 +59,11 @@ public class SimpleFilmSessionService implements FilmSessionService {
             Optional<Film> film = filmRepository.findById(filmSession.getFilmId());
             film.ifPresent(value -> filmSessionDto.setFilm(value.getName()));
             Optional<Hall> hall = hallRepository.findById(filmSession.getHall());
-            hall.ifPresent(value -> filmSessionDto.setHall(value.getName()));
+            hall.ifPresent(value -> {
+                filmSessionDto.setHall(value.getName());
+                filmSessionDto.setRowCount(value.getRowCount());
+                filmSessionDto.setPlaceCount(value.getPlaceCount());
+            });
             result.add(filmSessionDto);
         }
         return result;

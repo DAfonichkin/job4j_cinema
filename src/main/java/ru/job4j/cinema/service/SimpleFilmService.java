@@ -40,6 +40,7 @@ public class SimpleFilmService implements FilmService {
             FilmDto filmDto = new FilmDto(film);
             Optional<Genre> genre = genreRepository.findById(film.getGenreId());
             genre.ifPresent(value -> filmDto.setGenre(value.getName()));
+            result.add(filmDto);
         }
         return result;
     }

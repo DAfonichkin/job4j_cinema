@@ -5,7 +5,12 @@ import ru.job4j.cinema.model.FilmSession;
 import ru.job4j.cinema.model.Hall;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FilmSessionDto {
 
@@ -14,6 +19,10 @@ public class FilmSessionDto {
     private String film;
 
     private String hall;
+
+    private int rowCount;
+
+    private int placeCount;
 
     private LocalDateTime startTime;
 
@@ -24,13 +33,16 @@ public class FilmSessionDto {
     public FilmSessionDto() {
     }
 
-    public FilmSessionDto(int id, String film, String hall, LocalDateTime startTime, LocalDateTime endTime, int price) {
+    public FilmSessionDto(int id, String film, String hall, int placeCount, int rowCount,
+                          LocalDateTime startTime, LocalDateTime endTime, int price) {
         this.id = id;
         this.film = film;
         this.hall = hall;
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
+        this.placeCount = placeCount;
+        this.rowCount = rowCount;
     }
 
     public FilmSessionDto(FilmSession session) {
@@ -89,6 +101,39 @@ public class FilmSessionDto {
         this.price = price;
     }
 
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getPlaceCount() {
+        return placeCount;
+    }
+
+
+    public void setPlaceCount(int placeCount) {
+        this.placeCount = placeCount;
+    }
+
+    public Collection<Integer> getPlaceList() {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 1; i <= this.placeCount; i++) {
+            list.add(i);
+        }
+        return list;
+    }
+
+    public Collection<Integer> getRowList() {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 1; i <= this.rowCount; i++) {
+            list.add(i);
+        }
+        return list;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -105,4 +150,5 @@ public class FilmSessionDto {
     public int hashCode() {
         return Objects.hash(id, film, hall);
     }
+
 }
