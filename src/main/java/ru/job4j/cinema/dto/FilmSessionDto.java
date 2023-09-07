@@ -30,11 +30,14 @@ public class FilmSessionDto {
 
     private int price;
 
+
+    private int sessionId;
+
     public FilmSessionDto() {
     }
 
     public FilmSessionDto(int id, String film, String hall, int placeCount, int rowCount,
-                          LocalDateTime startTime, LocalDateTime endTime, int price) {
+                          LocalDateTime startTime, LocalDateTime endTime, int price, int sessionId) {
         this.id = id;
         this.film = film;
         this.hall = hall;
@@ -43,6 +46,7 @@ public class FilmSessionDto {
         this.price = price;
         this.placeCount = placeCount;
         this.rowCount = rowCount;
+        this.sessionId = sessionId;
     }
 
     public FilmSessionDto(FilmSession session) {
@@ -52,6 +56,13 @@ public class FilmSessionDto {
         this.price = session.getPrice();
     }
 
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public int getId() {
         return id;

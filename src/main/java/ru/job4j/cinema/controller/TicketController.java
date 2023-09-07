@@ -4,9 +4,12 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.cinema.dto.FilmSessionDto;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.service.FilmSessionService;
 import ru.job4j.cinema.service.TicketService;
+
+import java.util.List;
 
 
 @Controller
@@ -31,7 +34,7 @@ public class TicketController {
         }
         var filmSession = filmSessionOptional.get();
         model.addAttribute("rowList", filmSession.getRowList());
-        model.addAttribute("ticket", new Ticket());
+        model.addAttribute("sessionId", id);
         model.addAttribute("placeList", filmSession.getPlaceList());
         model.addAttribute("filmSession", filmSession);
         return "ticket/buy";
@@ -41,6 +44,7 @@ public class TicketController {
     public String buyTicket(@ModelAttribute Ticket ticket, Model model) {
         try {
             ticketService.save(ticket);
+            model.addAttribute("ticket", ticket);
             return "ticket/success";
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());

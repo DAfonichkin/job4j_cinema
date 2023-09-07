@@ -24,7 +24,7 @@ public class Sql2oTicketRepository implements TicketRepository {
                       VALUES (:session_id, :row_number, :place_number, :user_id)
                       """;
             var query = connection.createQuery(sql, true)
-                    .addParameter("session_id", ticket.getFilmSession())
+                    .addParameter("session_id", ticket.getSessionId())
                     .addParameter("row_number", ticket.getRowNumber())
                     .addParameter("place_number", ticket.getPlaceNumber())
                     .addParameter("user_id", ticket.getUser());
@@ -53,7 +53,7 @@ public class Sql2oTicketRepository implements TicketRepository {
                     WHERE id = :id
                     """;
             var query = connection.createQuery(sql)
-                    .addParameter("session_id", ticket.getFilmSession())
+                    .addParameter("session_id", ticket.getSessionId())
                     .addParameter("row_number", ticket.getRowNumber())
                     .addParameter("place_number", ticket.getPlaceNumber())
                     .addParameter("user_id", ticket.getUser());

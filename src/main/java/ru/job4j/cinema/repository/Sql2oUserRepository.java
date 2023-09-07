@@ -2,6 +2,7 @@ package ru.job4j.cinema.repository;
 
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
+import ru.job4j.cinema.model.Film;
 import ru.job4j.cinema.model.User;
 
 import java.util.Collection;
@@ -21,13 +22,13 @@ public class Sql2oUserRepository implements UserRepository {
         Optional<User> rsl = Optional.empty();
         try (var connection = sql2o.open()) {
             var sql = """
-                    INSERT INTO users(email, password, name)
+                    INSERT INTO users(email, password, full_name)
                     VALUES (:email, :password, :name)
                     """;
             var query = connection.createQuery(sql, true)
                     .addParameter("email", user.getEmail())
                     .addParameter("password", user.getPassword())
-                    .addParameter("name", user.getPassword());
+                    .addParameter("name", user.getName());
             int generatedId = query.executeUpdate().getKey(Integer.class);
             user.setId(generatedId);
             rsl = Optional.of(user);
@@ -43,7 +44,7 @@ public class Sql2oUserRepository implements UserRepository {
             var query = connection.createQuery("SELECT * FROM users WHERE email = :email and password = :password");
             query.addParameter("email", email);
             query.addParameter("password", password);
-            var user = query.executeAndFetchFirst(User.class);
+            var user = query.setColumnMappings(User.COLUMN_MAPPING).executeAndFetchFirst(User.class);
             return Optional.ofNullable(user);
         }
     }

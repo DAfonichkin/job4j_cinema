@@ -21,17 +21,15 @@
         <form class="mt-3" th:action="@{/ticket/buy}" method="post" th:object="${ticket}"
               enctype="multipart/form-data">
             <h3 class="mt-3">Покупка билета:</h3>
-            <input class="form-control" type="hidden" name="sessionId" id="sessionId" th:value="${filmSession.id}">
             <div class="row mb-3">
-
                 <div class="col-3">
                     <h5 class="mt-3">Информация о сеансе:</h5>
                     <p class="text" th:text="'Название фильма - ' + ${filmSession.film}"></p>
                     <p class="text" th:text="'Зал - ' + ${filmSession.hall}"></p>
-                    <p class="text" th:text="'Начало сеанса - ' + ${filmSession.startTime}"></p>
+                    <p class="text" th:text="'Начало сеанса - ' + ${#temporals.format(filmSession.startTime, 'dd.MM.yyyy HH:mm')}"></p>
                     <p class="text" th:text="'Стоимость билета - ' + ${filmSession.price}"></p>
                 </div>
-
+                <input type="hidden" name="sessionId" th:value="${sessionId}">
                 <div class="col-3">
                     <h5 class="mt-3">Выберите место:</h5>
                     <div class="mb-3">
@@ -50,13 +48,13 @@
             </div>
     </div>
     <div class="mb-3 row">
-        <div class="col-6"></div>
+        <div class="col-4"></div>
         <div class="col-6">
             <div class="row">
-                <div class="col-4"><a class="btn btn-light w-100" th:href="@{/sessions/list}">Отмена</a></div>
-                <div class="col-4">
+                <div class="col-3">
                     <button class="btn btn-success w-100" type="submit">Купить</button>
                 </div>
+                <div class="col-3"><a class="btn btn-light w-100" th:href="@{/sessions/list}">Отмена</a></div>
             </div>
         </div>
     </div>

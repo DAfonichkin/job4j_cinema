@@ -9,6 +9,8 @@ public class FilmDto {
 
     private int id;
 
+    private int fileId;
+
     private String name;
 
     private String description;
@@ -37,6 +39,7 @@ public class FilmDto {
 
     public FilmDto(Film film) {
         this.id = film.getId();
+        this.fileId = film.getFileId();
         this.name = film.getName();
         this.description = film.getDescription();
         this.year = film.getYear();
@@ -46,6 +49,7 @@ public class FilmDto {
 
     public FilmDto(Film film, String genre) {
         this.id = film.getId();
+        this.fileId = film.getFileId();
         this.name = film.getName();
         this.description = film.getDescription();
         this.year = film.getYear();
@@ -62,6 +66,13 @@ public class FilmDto {
         this.id = id;
     }
 
+    public int getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
+    }
     public String getName() {
         return name;
     }

@@ -20,6 +20,7 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Постер</th>
                     <th scope="col">Название фильма</th>
                     <th scope="col">Сюжет</th>
                     <th scope="col">Год выпуска</th>
@@ -31,7 +32,8 @@
                 <tbody>
                 <tr th:each="film: ${films}">
                     <td th:text="${film.id}" />
-                    <td><a th:text="${film.name}"</a></td>
+                    <td><img th:src="@{/files/{fileId}(fileId=${film.FileId})}" class="w-100" alt="No image"</img></td>
+                    <td><a th:text="${film.name}"</a>
                     <td th:text="${film.description}" />
                     <td th:text="${film.year}"/>
                     <td th:text="${film.minimalAge}"/>

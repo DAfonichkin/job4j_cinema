@@ -42,11 +42,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public int getFilmSession() {
+    public int getSessionId() {
         return sessionId;
     }
 
-    public void setFilmSession(int sessionId) {
+    public void setSessionId(int sessionId) {
         this.sessionId = sessionId;
     }
 
