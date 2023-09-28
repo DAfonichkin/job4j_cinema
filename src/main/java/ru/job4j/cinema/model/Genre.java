@@ -1,5 +1,6 @@
 package ru.job4j.cinema.model;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class Genre {
@@ -8,6 +9,10 @@ public class Genre {
 
     private String name;
 
+    public static final Map<String, String> COLUMN_MAPPING = Map.of(
+            "id", "id",
+            "name", "name"
+    );
     public Genre(int id, String name) {
         this.id = id;
         this.name = name;

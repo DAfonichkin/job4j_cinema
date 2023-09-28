@@ -54,7 +54,7 @@ public class Sql2oUserRepository implements UserRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("DELETE FROM users WHERE id = :id");
             query.addParameter("id", id);
-            var affectedRows = query.executeUpdate().getResult();
+            var affectedRows = query.setColumnMappings(User.COLUMN_MAPPING).executeUpdate().getResult();
             return affectedRows > 0;
         }
     }
@@ -64,7 +64,7 @@ public class Sql2oUserRepository implements UserRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM users WHERE id = :id");
             query.addParameter("id", id);
-            var user = query.executeAndFetchFirst(User.class);
+            var user = query.setColumnMappings(User.COLUMN_MAPPING).executeAndFetchFirst(User.class);
             return Optional.ofNullable(user);
         }
     }
@@ -73,7 +73,7 @@ public class Sql2oUserRepository implements UserRepository {
     public Collection<User> findAll() {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM users");
-            return query.executeAndFetch(User.class);
+            return query.setColumnMappings(User.COLUMN_MAPPING).executeAndFetch(User.class);
         }
     }
 }

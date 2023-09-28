@@ -29,7 +29,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
                     .addParameter("start_time", filmSession.getStartTime())
                     .addParameter("end_time", filmSession.getEndTime())
                     .addParameter("price", filmSession.getPrice());
-            int generatedId = query.executeUpdate().getKey(Integer.class);
+            int generatedId = query.setColumnMappings(FilmSession.COLUMN_MAPPING).executeUpdate().getKey(Integer.class);
             filmSession.setId(generatedId);
             return filmSession;
         }
@@ -40,8 +40,11 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("DELETE FROM film_sessions WHERE id = :id");
             query.addParameter("id", id);
-            var affectedRows = query.executeUpdate().getResult();
+            var affectedRows = query.setColumnMappings(FilmSession.COLUMN_MAPPING).executeUpdate().getResult();
             return affectedRows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -60,7 +63,7 @@ public class Sql2oFilmSessionRepository implements FilmSessionRepository {
                     .addParameter("start_time", filmSession.getStartTime())
                     .addParameter("end_time", filmSession.getEndTime())
                     .addParameter("price", filmSession.getPrice());
-            var affectedRows = query.executeUpdate().getResult();
+            var affectedRows = query.setColumnMappings(FilmSession.COLUMN_MAPPING).executeUpdate().getResult();
             return affectedRows > 0;
         }
     }

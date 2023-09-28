@@ -11,8 +11,6 @@ public interface FilmRepository {
 
     boolean deleteById(int id);
 
-    boolean update(Film film);
-
     Optional<Film> findById(int id);
 
     Collection<Film> findAll();

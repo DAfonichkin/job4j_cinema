@@ -20,20 +20,23 @@ public class Sql2oFilmRepository implements FilmRepository {
     public Film save(Film film) {
         try (var connection = sql2o.open()) {
             var sql = """
-                      INSERT INTO films(name, description, year, genre_id, minimal_age, duration_in_minutes, fileId)
-                      VALUES (:name, :description, :year, :genre_id, :minimal_age, :duration_in_minutes, :fileId)
-                      """;
+                    INSERT INTO films(name, description, "year", genre_id, minimal_age, duration_in_minutes, file_id)
+                    VALUES (:name, :description, :year, :genre_id, :minimal_age, :duration_in_minutes, :file_id)
+                    """;
             var query = connection.createQuery(sql, true)
                     .addParameter("name", film.getName())
                     .addParameter("description", film.getDescription())
                     .addParameter("year", film.getYear())
-                    .addParameter("genre_id", film.getYear())
-                    .addParameter("minimal_age", film.getYear())
-                    .addParameter("duration_in_minutes", film.getYear())
-                    .addParameter("fileId", film.getFileId());
-            int generatedId = query.executeUpdate().getKey(Integer.class);
+                    .addParameter("genre_id", film.getGenreId())
+                    .addParameter("minimal_age", film.getMinimalAge())
+                    .addParameter("duration_in_minutes", film.getDurationInMinutes())
+                    .addParameter("file_id", film.getFileId());
+            int generatedId = query.setColumnMappings(Film.COLUMN_MAPPING).executeUpdate().getKey(Integer.class);
             film.setId(generatedId);
             return film;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Film();
         }
     }
 
@@ -42,32 +45,11 @@ public class Sql2oFilmRepository implements FilmRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("DELETE FROM films WHERE id = :id");
             query.addParameter("id", id);
-            var affectedRows = query.executeUpdate().getResult();
+            var affectedRows = query.setColumnMappings(Film.COLUMN_MAPPING).executeUpdate().getResult();
             return affectedRows > 0;
         }
     }
 
-    @Override
-    public boolean update(Film film) {
-        try (var connection = sql2o.open()) {
-            var sql = """
-                    UPDATE films
-                    SET name = :name, description = :description, creation_date = :creationDate,
-                        city_id = :cityId, file_id = :fileId
-                    WHERE id = :id
-                    """;
-            var query = connection.createQuery(sql)
-                    .addParameter("name", film.getName())
-                    .addParameter("description", film.getDescription())
-                    .addParameter("year", film.getYear())
-                    .addParameter("genre_id", film.getYear())
-                    .addParameter("minimal_age", film.getYear())
-                    .addParameter("duration_in_minutes", film.getYear())
-                    .addParameter("fileId", film.getFileId());
-            var affectedRows = query.executeUpdate().getResult();
-            return affectedRows > 0;
-        }
-    }
 
     @Override
     public Optional<Film> findById(int id) {
