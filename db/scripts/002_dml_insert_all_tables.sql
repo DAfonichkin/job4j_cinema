@@ -1,7 +1,7 @@
-insert into files(name, path) values('bring_him_home.jpg', 'files\945efbba-585f-4e55-b1b9-0d7c10c37974bring_him_home.jpg');
-insert into files(name, path) values('little_woman.jpg', 'files\9322b203-cbc9-4dcb-8116-548d546a56d6little_woman.jpg');
-insert into files(name, path) values('moon.jpg', 'files\3d02e134-7518-42d4-82e5-6240bc431903moon.jpg');
-insert into files(name, path) values('thor.jpg', 'files\cb3541f3-5940-483b-bd3d-3ff41974ef88thor.jpg');
+insert into files(name, path) values('bring_him_home.jpg', 'file\945efbba-585f-4e55-b1b9-0d7c10c37974bring_him_home.jpg');
+insert into files(name, path) values('little_woman.jpg', 'file\9322b203-cbc9-4dcb-8116-548d546a56d6little_woman.jpg');
+insert into files(name, path) values('moon.jpg', 'file\3d02e134-7518-42d4-82e5-6240bc431903moon.jpg');
+insert into files(name, path) values('thor.jpg', 'file\cb3541f3-5940-483b-bd3d-3ff41974ef88thor.jpg');
 insert into genres(name) values('Action');
 insert into genres(name) values('Horror');
 insert into genres(name) values('Comedy');
