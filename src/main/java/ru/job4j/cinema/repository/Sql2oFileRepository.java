@@ -3,7 +3,7 @@ package ru.job4j.cinema.repository;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.job4j.cinema.model.File;
-import ru.job4j.cinema.model.Film;
+import org.apache.log4j.Logger;
 
 import java.util.Optional;
 
@@ -11,6 +11,7 @@ import java.util.Optional;
 public class Sql2oFileRepository implements FileRepository {
 
     private final Sql2o sql2o;
+    private static final Logger LOGGER = Logger.getLogger(Sql2oTicketRepository.class);
 
     public Sql2oFileRepository(Sql2o sql2o) {
         this.sql2o = sql2o;
@@ -26,7 +27,7 @@ public class Sql2oFileRepository implements FileRepository {
             file.setId(generatedId);
             return Optional.of(file);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Exception during saving file", e);
             return Optional.empty();
         }
     }
@@ -37,6 +38,9 @@ public class Sql2oFileRepository implements FileRepository {
             var query = connection.createQuery("SELECT * FROM files WHERE id = :id");
             var file = query.addParameter("id", id).executeAndFetchFirst(File.class);
             return Optional.ofNullable(file);
+        } catch (Exception e) {
+            LOGGER.error("Exception finding file", e);
+            return Optional.empty();
         }
     }
 
@@ -47,7 +51,7 @@ public class Sql2oFileRepository implements FileRepository {
             var affectedRows = query.addParameter("id", id).executeUpdate().getResult();
             return affectedRows > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Exception during deleting file", e);
             return false;
         }
     }

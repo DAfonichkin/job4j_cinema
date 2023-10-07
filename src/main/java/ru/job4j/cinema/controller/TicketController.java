@@ -10,6 +10,7 @@ import ru.job4j.cinema.service.FilmSessionService;
 import ru.job4j.cinema.service.TicketService;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -42,13 +43,11 @@ public class TicketController {
 
     @PostMapping("/buy")
     public String buyTicket(@ModelAttribute Ticket ticket, Model model) {
-        try {
-            ticketService.save(ticket);
-            model.addAttribute("ticket", ticket);
-            return "ticket/success";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        Optional<Ticket> savedTicket = ticketService.save(ticket);
+        if (savedTicket.isEmpty()) {
             return "ticket/error";
         }
+        model.addAttribute("ticket", ticket);
+        return "ticket/success";
     }
 }

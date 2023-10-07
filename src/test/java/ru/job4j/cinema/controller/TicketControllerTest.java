@@ -30,7 +30,7 @@ class TicketControllerTest {
     @Test
     void whenBuyTicketThenGetSuccessPage() {
         var ticket = new Ticket(1, 1, 1, 1, 1);
-        when(ticketService.save(ticket)).thenReturn(ticket);
+        when(ticketService.save(ticket)).thenReturn(Optional.of(ticket));
         var model = new ConcurrentModel();
         var view = ticketController.buyTicket(ticket, model);
         assertThat(view).isEqualTo("ticket/success");
@@ -40,7 +40,7 @@ class TicketControllerTest {
     void whenBuyTicketThenGetErrorPageWithMessage() {
         var ticket = new Ticket(1, 1, 1, 1, 1);
         var expectedException = new RuntimeException("");
-        when(ticketService.save(any())).thenThrow(expectedException);
+        when(ticketService.save(any())).thenReturn(Optional.empty());
         var model = new ConcurrentModel();
         var view = ticketController.buyTicket(ticket, model);
         assertThat(view).isEqualTo("ticket/error");

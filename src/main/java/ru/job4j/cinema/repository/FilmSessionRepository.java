@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FilmSessionRepository {
 
-    FilmSession save(FilmSession filmSession);
+    Optional<FilmSession>  save(FilmSession filmSession);
 
     boolean deleteById(int id);
 

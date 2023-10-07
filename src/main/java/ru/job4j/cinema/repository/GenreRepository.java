@@ -12,6 +12,6 @@ public interface GenreRepository {
 
     Collection<Genre> findAll();
 
-    Genre save(Genre genre);
+    Optional<Genre> save(Genre genre);
 
 }

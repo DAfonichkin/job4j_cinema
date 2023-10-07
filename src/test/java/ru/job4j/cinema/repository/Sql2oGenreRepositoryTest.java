@@ -58,16 +58,16 @@ class Sql2oGenreRepositoryTest {
 
     @Test
     void whenSaveThenGetSame() {
-        var genre = sql2oGenreRepository.save(new Genre(0, "test"));
+        var genre = sql2oGenreRepository.save(new Genre(0, "test")).get();
         var savedGenre = sql2oGenreRepository.findById(genre.getId()).get();
         assertThat(savedGenre).usingRecursiveComparison().isEqualTo(genre);
     }
 
     @Test
     void whenSaveSeveralThenGetAll() {
-        var genre1 = sql2oGenreRepository.save(new Genre(0, "test1"));
-        var genre2 = sql2oGenreRepository.save(new Genre(0, "test2"));
-        var genre3 = sql2oGenreRepository.save(new Genre(0, "test3"));
+        var genre1 = sql2oGenreRepository.save(new Genre(0, "test1")).get();
+        var genre2 = sql2oGenreRepository.save(new Genre(0, "test2")).get();
+        var genre3 = sql2oGenreRepository.save(new Genre(0, "test3")).get();
         var result = sql2oGenreRepository.findAll();
         assertThat(result).isEqualTo(List.of(genre1, genre2, genre3));
     }
@@ -80,7 +80,7 @@ class Sql2oGenreRepositoryTest {
 
     @Test
     void whenDeleteThenGetEmptyOptional() {
-        var genre = sql2oGenreRepository.save(new Genre(0, "test"));
+        var genre = sql2oGenreRepository.save(new Genre(0, "test")).get();
         var isDeleted = sql2oGenreRepository.deleteById(genre.getId());
         var savedGenre = sql2oGenreRepository.findById(genre.getId());
         assertThat(isDeleted).isTrue();

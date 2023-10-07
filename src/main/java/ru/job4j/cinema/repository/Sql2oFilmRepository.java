@@ -17,7 +17,7 @@ public class Sql2oFilmRepository implements FilmRepository {
     }
 
     @Override
-    public Film save(Film film) {
+    public Optional<Film> save(Film film) {
         try (var connection = sql2o.open()) {
             var sql = """
                     INSERT INTO films(name, description, "year", genre_id, minimal_age, duration_in_minutes, file_id)
@@ -33,10 +33,10 @@ public class Sql2oFilmRepository implements FilmRepository {
                     .addParameter("file_id", film.getFileId());
             int generatedId = query.setColumnMappings(Film.COLUMN_MAPPING).executeUpdate().getKey(Integer.class);
             film.setId(generatedId);
-            return film;
+            return Optional.of(film);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Film();
+            return Optional.empty();
         }
     }
 

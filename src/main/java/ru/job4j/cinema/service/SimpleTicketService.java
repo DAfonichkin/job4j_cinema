@@ -19,7 +19,7 @@ public class SimpleTicketService implements TicketService {
     }
 
     @Override
-    public Ticket save(Ticket ticket) {
+    public Optional<Ticket> save(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 

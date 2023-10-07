@@ -53,7 +53,7 @@ class Sql2oFilmRepositoryTest {
         sql2oGenreRepository.findAll()
                 .forEach(e -> sql2oGenreRepository.deleteById(e.getId()));
         file = sql2oFileRepository.save(new File("test", "test")).get();
-        genre = sql2oGenreRepository.save(new Genre(1, "test"));
+        genre = sql2oGenreRepository.save(new Genre(1, "test")).get();
     }
 
     @AfterAll
@@ -75,16 +75,16 @@ class Sql2oFilmRepositoryTest {
 
     @Test
     void whenSaveThenGetSame() {
-        var testFilm = sql2oFilmRepository.save(new Film(0, "name", "description", 1, genre.getId(), 1, 1, file.getId()));
+        var testFilm = sql2oFilmRepository.save(new Film(0, "name", "description", 1, genre.getId(), 1, 1, file.getId())).get();
         var savedFilm = sql2oFilmRepository.findById(testFilm.getId()).get();
         assertThat(savedFilm).usingRecursiveComparison().isEqualTo(testFilm);
     }
 
     @Test
     void whenSaveSeveralThenGetAll() {
-        var testFilm = sql2oFilmRepository.save(new Film(0, "name1", "description1", 1, genre.getId(), 1, 1, file.getId()));
-        var testFilm2 = sql2oFilmRepository.save(new Film(0, "name2", "description2", 1, genre.getId(), 1, 1, file.getId()));
-        var testFilm3 = sql2oFilmRepository.save(new Film(0, "name3", "description3", 1, genre.getId(), 1, 1, file.getId()));
+        var testFilm = sql2oFilmRepository.save(new Film(0, "name1", "description1", 1, genre.getId(), 1, 1, file.getId())).get();
+        var testFilm2 = sql2oFilmRepository.save(new Film(0, "name2", "description2", 1, genre.getId(), 1, 1, file.getId())).get();
+        var testFilm3 = sql2oFilmRepository.save(new Film(0, "name3", "description3", 1, genre.getId(), 1, 1, file.getId())).get();
         var result = sql2oFilmRepository.findAll();
         assertThat(result).isEqualTo(List.of(testFilm, testFilm2, testFilm3));
     }
@@ -98,8 +98,8 @@ class Sql2oFilmRepositoryTest {
     @Test
     void whenDeleteThenGetEmptyOptional() {
         var testFilm = sql2oFilmRepository.save(new Film(0, "name", "description", 1, genre.getId(), 1, 1, file.getId()));
-        var isDeleted = sql2oFilmRepository.deleteById(testFilm.getId());
-        var savedFilm = sql2oFilmRepository.findById(testFilm.getId());
+        var isDeleted = sql2oFilmRepository.deleteById(testFilm.get().getId());
+        var savedFilm = sql2oFilmRepository.findById(testFilm.get().getId());
         assertThat(isDeleted).isTrue();
         assertThat(savedFilm).isNotPresent();
     }

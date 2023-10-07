@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TicketService {
 
-    Ticket save(Ticket ticket);
+    Optional<Ticket> save(Ticket ticket);
 
     boolean deleteById(int id);
 

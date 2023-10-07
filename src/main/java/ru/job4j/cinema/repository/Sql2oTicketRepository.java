@@ -2,27 +2,31 @@ package ru.job4j.cinema.repository;
 
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 import ru.job4j.cinema.model.Ticket;
+import org.apache.log4j.Logger;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 @Repository
 public class Sql2oTicketRepository implements TicketRepository {
 
     private final Sql2o sql2o;
+    private static final Logger LOGGER = Logger.getLogger(Sql2oTicketRepository.class);
 
     public Sql2oTicketRepository(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
     @Override
-    public Ticket save(Ticket ticket) {
+    public Optional<Ticket> save(Ticket ticket) {
         try (var connection = sql2o.open()) {
             var sql = """
-                      INSERT INTO tickets(session_id, row_number, place_number, user_id)
-                      VALUES (:session_id, :row_number, :place_number, :user_id)
-                      """;
+                    INSERT INTO tickets(session_id, row_number, place_number, user_id)
+                    VALUES (:session_id, :row_number, :place_number, :user_id)
+                    """;
             var query = connection.createQuery(sql, true)
                     .addParameter("session_id", ticket.getSessionId())
                     .addParameter("row_number", ticket.getRowNumber())
@@ -30,7 +34,12 @@ public class Sql2oTicketRepository implements TicketRepository {
                     .addParameter("user_id", ticket.getUser());
             int generatedId = query.executeUpdate().getKey(Integer.class);
             ticket.setId(generatedId);
-            return ticket;
+            return Optional.of(ticket);
+        } catch (Sql2oException e) {
+            return Optional.empty();
+        } catch (Exception e) {
+            LOGGER.error("Exception during saving ticket", e);
+            return Optional.empty();
         }
     }
 
@@ -41,7 +50,11 @@ public class Sql2oTicketRepository implements TicketRepository {
             query.addParameter("id", id);
             var affectedRows = query.executeUpdate().getResult();
             return affectedRows > 0;
+        } catch (Exception e) {
+            LOGGER.error("Exception during delete ticket by id", e);
+            return false;
         }
+
     }
 
     @Override
@@ -59,6 +72,9 @@ public class Sql2oTicketRepository implements TicketRepository {
                     .addParameter("user_id", ticket.getUser());
             var affectedRows = query.executeUpdate().getResult();
             return affectedRows > 0;
+        } catch (Exception e) {
+            LOGGER.error("Exception during updating ticket", e);
+            return false;
         }
     }
 
@@ -69,6 +85,9 @@ public class Sql2oTicketRepository implements TicketRepository {
             query.addParameter("id", id);
             var ticket = query.setColumnMappings(Ticket.COLUMN_MAPPING).executeAndFetchFirst(Ticket.class);
             return Optional.ofNullable(ticket);
+        } catch (Exception e) {
+            LOGGER.error("Exception during find ticket by id", e);
+            return Optional.empty();
         }
     }
 
@@ -77,6 +96,9 @@ public class Sql2oTicketRepository implements TicketRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM tickets");
             return query.setColumnMappings(Ticket.COLUMN_MAPPING).executeAndFetch(Ticket.class);
+        } catch (Exception e) {
+            LOGGER.error("Exception during find tickets", e);
+            return Collections.emptyList();
         }
     }
 

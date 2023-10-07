@@ -53,11 +53,11 @@ class Sql2oSessionRepositoryTest {
         sql2oHallRepository = new Sql2oHallRepository(sql2o);
         sql2oSessionRepository = new Sql2oFilmSessionRepository(sql2o);
 
-        genre = sql2oGenreRepository.save(new Genre(1, "test"));
+        genre = sql2oGenreRepository.save(new Genre(1, "test")).get();
         file = sql2oFileRepository.save(new File("image.jpg", "path/file")).get();
         film = sql2oFilmRepository.save(
-                new Film(0, "name", "description", 1, genre.getId(), 1, 1, file.getId()));
-        hall = sql2oHallRepository.save(new Hall(1, "Main Hall", 20, 15, "Main cinema hall"));
+                new Film(0, "name", "description", 1, genre.getId(), 1, 1, file.getId())).get();
+        hall = sql2oHallRepository.save(new Hall(1, "Main Hall", 20, 15, "Main cinema hall")).get();
         sql2oSessionRepository.findAll()
                 .forEach(e -> sql2oSessionRepository.deleteById(e.getId()));
     }
@@ -83,14 +83,14 @@ class Sql2oSessionRepositoryTest {
     void whenSaveThenNewId() {
         int id = 0;
         FilmSession session = new FilmSession(id, film.getId(), hall.getId(), START, END, 100);
-        FilmSession actual = sql2oSessionRepository.save(session);
+        FilmSession actual = sql2oSessionRepository.save(session).get();
         assertThat(actual.getId()).isGreaterThan(id);
     }
 
     @Test
     void whenSaveThenGetSame() {
         FilmSession session = new FilmSession(0, film.getId(), hall.getId(), START, END, 100);
-        FilmSession expected = sql2oSessionRepository.save(session);
+        FilmSession expected = sql2oSessionRepository.save(session).get();
         Optional<FilmSession> actual = sql2oSessionRepository.findById(expected.getId());
         assertThat(actual).isEqualTo(Optional.of(expected));
     }
@@ -119,7 +119,7 @@ class Sql2oSessionRepositoryTest {
     @Test
     void whenDeleteThenGetEmptyOptional() {
         FilmSession session = new FilmSession(0, film.getId(), hall.getId(), START, END, 100);
-        int id = sql2oSessionRepository.save(session).getId();
+        int id = sql2oSessionRepository.save(session).get().getId();
         boolean result = sql2oSessionRepository.deleteById(id);
         Optional<FilmSession> actual = sql2oSessionRepository.findById(id);
         assertThat(result).isTrue();
