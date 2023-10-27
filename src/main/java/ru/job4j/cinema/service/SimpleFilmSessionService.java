@@ -2,6 +2,7 @@ package ru.job4j.cinema.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.dto.FilmSessionDto;
+import ru.job4j.cinema.dto.mapper.FilmSessionMapper;
 import ru.job4j.cinema.model.FilmSession;
 import ru.job4j.cinema.model.Film;
 import ru.job4j.cinema.model.Hall;
@@ -20,11 +21,13 @@ public class SimpleFilmSessionService implements FilmSessionService {
     private final FilmSessionRepository filmSessionRepository;
     private final FilmRepository filmRepository;
     private final HallRepository hallRepository;
+    private final FilmSessionMapper filmSessionMapper;
 
-    public SimpleFilmSessionService(FilmSessionRepository filmSessionRepository, FilmRepository filmRepository, HallRepository hallRepository) {
+    public SimpleFilmSessionService(FilmSessionRepository filmSessionRepository, FilmRepository filmRepository, HallRepository hallRepository, FilmSessionMapper filmSessionMapper) {
         this.filmSessionRepository = filmSessionRepository;
         this.filmRepository = filmRepository;
         this.hallRepository = hallRepository;
+        this.filmSessionMapper = filmSessionMapper;
     }
 
     @Override
@@ -34,15 +37,14 @@ public class SimpleFilmSessionService implements FilmSessionService {
             return Optional.empty();
         }
         FilmSession filmSession = filmSessionOptional.get();
-        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession);
-        Optional<Film> film = filmRepository.findById(filmSession.getFilmId());
-        film.ifPresent(value -> filmSessionDto.setFilm(value.getName()));
-        Optional<Hall> hall = hallRepository.findById(filmSession.getHall());
-        hall.ifPresent(value -> {
-            filmSessionDto.setHall(value.getName());
-            filmSessionDto.setRowCount(value.getRowCount());
-            filmSessionDto.setPlaceCount(value.getPlaceCount());
-        });
+        var filmOptional = filmRepository.findById(filmSession.getFilmId());
+        var hallOptional = hallRepository.findById(filmSession.getHall());
+        if (filmOptional.isEmpty() || hallOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        Film film = filmOptional.get();
+        Hall hall = hallOptional.get();
+        FilmSessionDto filmSessionDto = filmSessionMapper.getFilmSessionDtoFromEntity(filmSession, film, hall);
         return Optional.of(filmSessionDto);
     }
 
@@ -55,15 +57,14 @@ public class SimpleFilmSessionService implements FilmSessionService {
     public Collection<FilmSessionDto> getFilmSessionList() {
         List<FilmSessionDto> result = new ArrayList<>();
         for (FilmSession filmSession : filmSessionRepository.findAll()) {
-            FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession);
-            Optional<Film> film = filmRepository.findById(filmSession.getFilmId());
-            film.ifPresent(value -> filmSessionDto.setFilm(value.getName()));
-            Optional<Hall> hall = hallRepository.findById(filmSession.getHall());
-            hall.ifPresent(value -> {
-                filmSessionDto.setHall(value.getName());
-                filmSessionDto.setRowCount(value.getRowCount());
-                filmSessionDto.setPlaceCount(value.getPlaceCount());
-            });
+            var filmOptional = filmRepository.findById(filmSession.getFilmId());
+            var hallOptional = hallRepository.findById(filmSession.getHall());
+            if (filmOptional.isEmpty() || hallOptional.isEmpty()) {
+                 continue;
+            }
+            Film film = filmOptional.get();
+            Hall hall = hallOptional.get();
+            FilmSessionDto filmSessionDto = filmSessionMapper.getFilmSessionDtoFromEntity(filmSession, film, hall);
             result.add(filmSessionDto);
         }
         return result;

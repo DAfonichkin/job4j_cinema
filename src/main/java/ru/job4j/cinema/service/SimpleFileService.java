@@ -3,6 +3,7 @@ package ru.job4j.cinema.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.dto.FileDto;
+import ru.job4j.cinema.dto.mapper.FileMapper;
 import ru.job4j.cinema.model.File;
 import ru.job4j.cinema.repository.FileRepository;
 
@@ -17,11 +18,14 @@ public class SimpleFileService implements FileService {
 
     private final FileRepository fileRepository;
 
+    private final FileMapper fileMapper;
+
     private final String storageDirectory;
 
     public SimpleFileService(FileRepository sql2oFileRepository,
-                             @Value("${file.directory}") String storageDirectory) {
+                             FileMapper fileMapper, @Value("${file.directory}") String storageDirectory) {
         this.fileRepository = sql2oFileRepository;
+        this.fileMapper = fileMapper;
         this.storageDirectory = storageDirectory;
         createStorageDirectory(storageDirectory);
     }
@@ -59,17 +63,9 @@ public class SimpleFileService implements FileService {
         if (fileOptional.isEmpty()) {
             return Optional.empty();
         }
-        var content = readFileAsBytes(fileOptional.get().getPath());
-        return Optional.of(new FileDto(fileOptional.get().getName(), content));
+        return Optional.of(fileMapper.getDtoFromEntity(fileOptional.get()));
     }
 
-    private byte[] readFileAsBytes(String path) {
-        try {
-            return Files.readAllBytes(Path.of(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public boolean deleteById(int id) {
